@@ -1,0 +1,29 @@
+{
+  "name": "Cyril",
+  "version": "0.1.0",
+  "description": "A finance management app created in Node, Electron, and React",
+  "main": "app/main.js",
+  "author": "jc",
+  "license": "MIT",
+  "dependencies": {
+    "react": "^15.4.1",
+    "react-dom": "^15.4.1"
+  },
+  "devDependencies": {
+    "buble": "~0.14.2",
+    "dart-sass": "latest",
+    "electron": "~1.4.10",
+    "electron-connect": "~0.6.1",
+    "gulp": "~3.9.1",
+    "gulp-buble": "~0.8.0",
+    "gulp-clean": "^0.3.2",
+    "gulp-concat": "~2.6.1",
+    "gulp-file": "^0.3.0",
+    "gulp-sourcemaps": "~1.9.1"
+  },
+  "scripts": {
+    "build": "gulp build",
+    "serve": "gulp serve",
+    "start": "electron ."
+  }
+}
