@@ -1,5 +1,5 @@
 {
-  "name": "Cyril",
+  "name": "cyril",
   "version": "0.1.0",
   "description": "A finance management app created in Node, Electron, and React",
   "main": "app/main.js",
@@ -19,7 +19,8 @@
     "gulp-clean": "^0.3.2",
     "gulp-concat": "~2.6.1",
     "gulp-file": "^0.3.0",
-    "gulp-sourcemaps": "~1.9.1"
+    "gulp-sourcemaps": "~1.9.1",
+    "run-sequence": "~1.2.2"
   },
   "scripts": {
     "build": "gulp build",
