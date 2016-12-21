@@ -20,11 +20,18 @@
     "gulp-concat": "~2.6.1",
     "gulp-file": "^0.3.0",
     "gulp-sourcemaps": "~1.9.1",
+    "jest": "^18.0.0",
+    "react-test-renderer": "^15.4.1",
     "run-sequence": "~1.2.2"
+  },
+  "jest": {
+    "collectCoverage": true,
+    "collectCoverageFrom": ["app/ui/cyril.js"]
   },
   "scripts": {
     "build": "gulp build",
     "serve": "gulp serve",
-    "start": "electron ."
+    "start": "electron .",
+    "test": "jest"
   }
 }
