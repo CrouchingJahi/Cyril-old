@@ -1,11 +1,8 @@
 'use strict';
 
 const gulp = require('gulp'),
-  sourcemaps = require('gulp-sourcemaps'),
-  concat = require('gulp-concat'),
+  // sourcemaps = require('gulp-sourcemaps'),
   clean = require('gulp-clean'),
-  file = require('gulp-file'),
-  buble = require('gulp-buble'),
   runSequence = require('run-sequence'),
   sass = require('dart-sass'),
   fs = require('fs'),
@@ -13,9 +10,10 @@ const gulp = require('gulp'),
   server = require('electron-connect').server;
 
 const input = {
-  jsx: 'src/jsx/**/*.jsx',
-  sass: 'src/style/*.scss',
-  index: 'src/index.html'
+  app: 'app/ui/app.js',
+  jsx: 'app/ui/**/*.jsx',
+  sass: 'app/style/*.scss',
+  index: 'app/index.html'
 };
 const output = {
   dir: 'app',
@@ -39,21 +37,10 @@ function sassify() {
 }
 
 gulp.task('clean', function () {
-  gulp.src(['app/ui/*'], {read: false})
+  gulp.src([output.path('css')], {read: false})
     .pipe(clean());
 });
 
-gulp.task('build:index', function () {
-  gulp.src(input.index)
-    .pipe(gulp.dest(output.dir));
-});
-gulp.task('build:js', function () {
-  fs.writeFileSync(output.path('js'), '');
-  gulp.src(input.jsx)
-    .pipe(buble())
-    .pipe(concat(output.js))
-    .pipe(gulp.dest(output.dir));
-});
 gulp.task('build:css', function () {
   fs.writeFileSync(output.path('css'), '');
   gulp.src(input.sass)
@@ -64,20 +51,16 @@ gulp.task('build', function () {
     if (!stats) {
       fs.mkdirSync(output.path('ui'));
     }
-    runSequence(['build:index', 'build:js', 'build:css']);
+    runSequence(['build:css']);
   });
-});
-
-gulp.task('watch', function () {
-  gulp.watch(input.index, ['build:index', electron.restart]);
-  gulp.watch(input.sass, ['build:css', electron.restart]);
-  gulp.watch(input.jsx, ['build:js', electron.restart]);
 });
 
 gulp.task('serve', function () {
   var electron = server.create();
   electron.start();
-  runSequence('watch');
+  gulp.watch(input.index, ['build:index', electron.restart]);
+  gulp.watch(input.sass, ['build:css', electron.restart]);
+  gulp.watch(input.jsx, ['build:js', electron.restart]);
 });
 
 gulp.task('default', ['clean', 'build', 'serve']);

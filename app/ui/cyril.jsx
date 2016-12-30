@@ -1,11 +1,8 @@
-var React = require('react'),
-  render = require('react-dom').render;
-// import React from 'react'
-// import { render } from 'react-dom'
+import React from 'react';
+import { render } from 'react-dom';
 // import { Router, Route, browserHistory } from 'react-router'
 
-// import Home from './app/page/home';
-// require('./app/page/home');
+import Home from './home/Page_Home.jsx';
 
 document.addEventListener("DOMContentLoaded", function(event) {
   var container = document.getElementById('cyril');
@@ -18,3 +15,5 @@ document.addEventListener("DOMContentLoaded", function(event) {
     */
   , container);
 });
+
+module.exports = this;
