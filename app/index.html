@@ -3,7 +3,10 @@
   <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" type="text/css" href="ui/cyril.css" />
-    <script src="ui/app.js"></script>
+    <script>
+      require('babel-register');
+      require('./ui/cyril');
+    </script>
   </head>
   <body>
     <div id="cyril"></div>

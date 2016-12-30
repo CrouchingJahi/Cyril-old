@@ -7,7 +7,7 @@ This project uses Gulp, so in order to develop with it, you must have gulp-cli i
 - Run app in live reload mode using `gulp serve` - app will automatically restart when a source file is changed  
 -OR-  
 - Run app normally using `npm start`  
-- - -
+- - -  
 ## Gulp Commands
 This project uses Gulp for its build processes. These are the commands available in this project:  
 - `gulp clean`  
@@ -20,7 +20,7 @@ This project uses Gulp for its build processes. These are the commands available
  - Starts an instance of electron then watches for changes in the index file, sass files, or jsx files and automatically restarts Electron to load any updates.
 - `gulp`
  - The default task performs a sequence of `clean`, `build`, then `serve`.
-- - -
+- - -  
 ## Developer's Guide
 
 #### Merge Process
@@ -38,8 +38,7 @@ Your work should go into another branch, then you can push it up and use a merge
 |   |   |   └── *.jsx
 |   |   ├── (page)
 |   |   |   └── *.jsx
-|   |   ├── cyril.jsx
-|   |   └── app.js
+|   |   └── cyril.jsx
 |   ├── services
 |   |   └── *.js
 |   └── index.html
