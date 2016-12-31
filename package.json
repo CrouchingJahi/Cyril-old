@@ -30,7 +30,8 @@
   "jest": {
     "collectCoverage": true,
     "collectCoverageFrom": [
-      "app/ui/**/*.jsx"
+      "app/ui/**/*.jsx",
+      "!app/ui/cyril.jsx"
     ]
   },
   "scripts": {
