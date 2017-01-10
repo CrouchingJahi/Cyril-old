@@ -8,6 +8,12 @@ This project uses Gulp, so in order to develop with it, you must have gulp-cli i
 -OR-  
 - Run app normally using `npm start`  
 - - -  
+## NPM Commands
+`npm run build` - Same as using `gulp build`  
+`npm run serve` - Same as using `gulp serve`  
+`npm start` - Runs the application (not in live reload mode)  
+`npm test` - Runs the test suite. To check coverage, visit the "coverage" folder that will be generated in the project directory.
+- - -  
 ## Gulp Commands
 This project uses Gulp for its build processes. These are the commands available in this project:  
 - `gulp clean`  
