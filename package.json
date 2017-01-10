@@ -17,15 +17,19 @@
     "dart-sass": "latest",
     "electron": "~1.4.10",
     "electron-connect": "~0.6.1",
+    "enzyme": "^2.7.0",
     "gulp": "~3.9.1",
     "gulp-clean": "~0.3.2",
     "gulp-sourcemaps": "~1.9.1",
     "jest": "~18.0.0",
-    "react-test-renderer": "~15.4.1",
+    "react-addons-test-utils": "~15.4.1",
     "run-sequence": "~1.2.2"
   },
   "babel": {
-    "presets": ["es2015", "react"]
+    "presets": [
+      "es2015",
+      "react"
+    ]
   },
   "jest": {
     "collectCoverage": true,
