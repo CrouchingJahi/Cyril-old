@@ -5,3 +5,12 @@ body {
   color: $lgreen;
   padding: 2rem;
 }
+
+a {
+  color: $cream;
+  text-decoration: none;
+}
+
+a:hover {
+  color: $gold;
+}
