@@ -15,7 +15,8 @@ export default class Link extends React.Component {
     this.handleClick = this.handleClick.bind(this);
   }
 
-  handleClick() {
+  handleClick(e) {
+    e.preventDefault();
     findDOMNode(this).dispatchEvent(routeEvent(this.props.state));
   }
 

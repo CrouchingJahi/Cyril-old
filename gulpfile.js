@@ -3,7 +3,6 @@
 const gulp = require('gulp'),
   // sourcemaps = require('gulp-sourcemaps'),
   clean = require('gulp-clean'),
-  runSequence = require('run-sequence'),
   sass = require('dart-sass'),
   fs = require('fs'),
   through = require('through2'),
@@ -46,21 +45,16 @@ gulp.task('build:css', function () {
   gulp.src(input.sass)
     .pipe(sassify());
 });
-gulp.task('build', function () {
-  fs.stat(output.path('ui'), function (err, stats) {
-    if (!stats) {
-      fs.mkdirSync(output.path('ui'));
-    }
-    runSequence(['build:css']);
-  });
-});
+gulp.task('build', ['build:css']);
 
 gulp.task('serve', function () {
   var electron = server.create();
   electron.start();
-  gulp.watch(input.index, ['build:index', electron.restart]);
+  gulp.watch(input.index, [electron.restart]);
   gulp.watch(input.sass, ['build:css', electron.restart]);
-  gulp.watch(input.jsx, ['build:js', electron.restart]);
+  gulp.watch(input.jsx, [electron.restart]);
 });
+
+gulp.task('sass', ['build:css']);
 
 gulp.task('default', ['clean', 'build', 'serve']);

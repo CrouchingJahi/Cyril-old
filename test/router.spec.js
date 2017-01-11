@@ -1,6 +1,6 @@
 import React from 'react';
-import { unmountComponentAtNode } from 'react-dom';
 import { mount } from 'enzyme';
+
 import Router, { routeEvent } from '../app/ui/router/Router.jsx';
 
 describe('The Router component', () => {
