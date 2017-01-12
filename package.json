@@ -17,10 +17,10 @@
     "dart-sass": "latest",
     "electron": "~1.4.10",
     "electron-connect": "~0.6.1",
-    "enzyme": "^2.7.0",
+    "enzyme": "~2.7.0",
     "gulp": "~3.9.1",
     "gulp-clean": "~0.3.2",
-    "gulp-sourcemaps": "~1.9.1",
+    "gulp-concat": "~2.6.1",
     "jest": "~18.0.0",
     "react-addons-test-utils": "~15.4.1"
   },
