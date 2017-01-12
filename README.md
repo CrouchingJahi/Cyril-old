@@ -6,7 +6,8 @@ This project uses Gulp, so in order to develop with it, you must have gulp-cli i
 - Build app using `gulp build`  
 - Run app in live reload mode using `gulp serve` - app will automatically restart when a source file is changed  
 -OR-  
- Run app normally using `npm start`  
+ Run app normally using `npm start`
+
 ---
 ## NPM Commands  
 `npm run build` - Same as using `gulp build`  
