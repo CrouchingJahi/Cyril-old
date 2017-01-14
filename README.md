@@ -12,7 +12,6 @@ This project uses Gulp, so in order to develop with it, you must have gulp-cli i
 ## NPM Commands  
 `npm run build` - Same as using `gulp build`  
 `npm run serve` - Same as using `gulp serve`  
-`npm start` - Runs the application (not in live reload mode)  
 `npm test` - Runs the test suite. To check coverage, visit the "coverage" folder that will be generated in the project directory.
 
 ---
@@ -24,16 +23,16 @@ This project uses Gulp for its build processes. These are the commands available
  - Generates all code that's necessary for the app to run. Currently, this is only the CSS.
 - `gulp build:css`
  - Compiles all the sass in the `app/style` folder into `app/ui/cyril.css`.
-- `gulp sass`
- - Same as `gulp build:css`.
 - `gulp serve`
  - Starts an instance of electron, same as `npm start`.
 - `gulp watch:sass`
  - Watches and automatically runs `gulp build:css` if a change is detected in any of the sass files.
+- `gulp watch`
+ - Same as `gulp watch:sass`
 - `gulp dev`
- - Runs `grunt serve` and watches the sass files. If a change is detected, runs `gulp build:css` and then restarts the electron process. Also needs to be fixed to run more smoothly.
+ - Runs `grunt watch` and `grunt serve`. Also, if a change is detected in the CSS or JSX, the electron window restarts.
 - `gulp`
- - The default task performs a sequence of `clean`, `build`, then `serve`.
+ - The default task performs a sequence of `clean`, `build`, then `dev`.
 
 ## Developer's Guide  
 
@@ -68,6 +67,6 @@ The app folder contains the code for both the frontend (ui folder) and backend (
 The test folder will be separated into ui, and services. Jest will be used as the test framework since it works well with React but can also be used with other Javascript code.  
 #### Naming Conventions
 Since this is such a small app, there is not as much of a need to have organizing standards. These are the only rules I've come up with so far:  
-* Frontend .jsx files should be organized with the convention `(page)/(type)_(name).jsx`, such as `summary/PieChart.jsx`. Common components that are shared between pages go into the 'common' folder.  
+* Frontend .jsx files should be organized with the convention `(page)/(name).jsx`, such as `summary/PieChart.jsx`. Common components that are shared between pages go into the 'common' folder.  
 * .scss files don't really need to be separated into folders. You can just throw them in the "style" folder named by page. All component styling can be put into the page's style file.  
 * The backend files also don't need to be separated into folders. They can just be named by whatever function they perform.  

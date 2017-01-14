@@ -7,7 +7,7 @@ const gulp = require('gulp'),
   concat = require('gulp-concat'),
   sass = require('dart-sass'),
   through = require('through2'),
-  server = require('electron-connect').server;
+  electron = require('electron-connect').server.create();
 
 const input = {
   jsx: 'app/ui/**/*.jsx',
@@ -49,6 +49,7 @@ gulp.task('clean', function () {
 
 // dart-sass is young, and it does not yet support source maps.
 // The functionality is here, though, for whenever it's added.
+// https://github.com/sass/dart-sass/issues/2
 gulp.task('build:css', function () {
   gulp.src(input.sass)
     // .pipe(sourcemaps.init())
@@ -57,23 +58,19 @@ gulp.task('build:css', function () {
     .pipe(concat(output.path('css')))
     .pipe(gulp.dest('.'));
 });
-gulp.task('sass', ['build:css']);
 gulp.task('build', ['build:css']);
 
 gulp.task('watch:sass', function () {
   gulp.watch(input.sass, ['build:css']);
 });
-gulp.task('dev', function () {
-  var electron = server.create();
-  electron.start();
-  gulp.watch(input.sass, ['build:css', electron.restart]);
-
-  // gulp.watch([input.index, input.sass, input.jsx], [electron.restart]);
-});
+gulp.task('watch', ['watch:sass']);
 
 gulp.task('serve', function () {
-  var electron = server.create();
   electron.start();
 });
 
-gulp.task('default', ['clean', 'build', 'watch']);
+gulp.task('dev', ['watch', 'serve'], function () {
+  gulp.watch([input.jsx, input.sass], electron.reload);
+});
+
+gulp.task('default', ['clean', 'build', 'dev']);

@@ -1,6 +1,7 @@
 'use strict';
 
 const {app, BrowserWindow} = require('electron');
+const client = require('electron-connect').client;
 
 // app.commandLine.appendSwitch('disable-http-cache');
 // Keep a global reference of the window object, if you don't, the window will
@@ -11,6 +12,7 @@ function createWindow () {
   win = new BrowserWindow({
     width: 1024,
     height: 768,
+    // icon: 'images/icon.png',
     title: 'Cyril'
   });
   win.loadURL('file://' + __dirname + '/index.html');
@@ -18,6 +20,7 @@ function createWindow () {
   win.on('closed', () => {
     win = null;
   });
+  client.create(win);
 }
 
 app.on('ready', createWindow);
