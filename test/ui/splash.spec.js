@@ -1,9 +1,8 @@
 import React from 'react';
 import { mount } from 'enzyme';
 
+import SplashScreen from '../../app/ui/splash/Splash.jsx';
 import { shell } from 'electron';
-
-import SplashScreen from '../app/ui/splash/Splash.jsx';
 
 describe('The splash screen', () => {
   const component = mount(<SplashScreen />);
