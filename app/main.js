@@ -1,19 +1,20 @@
 'use strict';
 
+require('babel-register');
 const {app, BrowserWindow} = require('electron');
 const client = require('electron-connect').client;
+const DBC  = require('./services/DBC');
 
-// app.commandLine.appendSwitch('disable-http-cache');
-// Keep a global reference of the window object, if you don't, the window will
-// be closed automatically when the JavaScript object is garbage collected.
-let win;
+let win, dbc;
 
 function createWindow () {
+  dbc = new DBC();
   win = new BrowserWindow({
     width: 1024,
     height: 768,
     // icon: 'images/icon.png',
-    title: 'Cyril'
+    title: 'Cyril',
+    backgroundColor: '#333B3D'
   });
   win.loadURL('file://' + __dirname + '/index.html');
   win.webContents.openDevTools();

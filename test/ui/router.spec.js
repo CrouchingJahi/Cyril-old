@@ -1,7 +1,7 @@
 import React from 'react';
 import { mount } from 'enzyme';
 
-import Router, { routeEvent } from '../app/ui/router/Router.jsx';
+import Router, { routeEvent } from '../../app/ui/router/Router.jsx';
 
 describe('The Router component', () => {
   function TestRoute(props) {

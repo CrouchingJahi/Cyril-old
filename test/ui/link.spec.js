@@ -1,7 +1,6 @@
 import React from 'react';
 import { mount } from 'enzyme';
-import Router, { routeEvent } from '../app/ui/router/Router.jsx';
-import Link from '../app/ui/router/Link.jsx';
+import Link from '../../app/ui/router/Link.jsx';
 
 describe('The Link component', () => {
   let component = mount(<Link state="test">blah</Link>);
