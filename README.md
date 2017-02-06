@@ -8,6 +8,7 @@ This project uses Gulp, so in order to develop with it, you must have gulp-cli i
 -OR-  
  Run app normally using `npm start`
 
+Because of some of the dependencies, you may see an error along the lines of being unable to find the bindings file for node_expat.node. In this case, try globally installing `node-expat`.
 ---
 ## NPM Commands  
 `npm run build` - Same as using `gulp build`  

@@ -1,5 +1,3 @@
-'use strict';
-
 require('babel-register');
 const {app, BrowserWindow} = require('electron');
 const client = require('electron-connect').client;
