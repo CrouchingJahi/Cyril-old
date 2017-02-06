@@ -1,4 +1,3 @@
-import * as fs from 'fs';
 import * as ofx from 'ofx';
 import { Transaction } from './DBC';
 

@@ -31,11 +31,16 @@ function sassify(options) {
       // options.outFile = output.path('css');
     // }
     sass.render(options, function (err, result) {
-      file.contents = result.buffer;
-      // if (file.sourceMap) {
-        // applySourceMap(file, result.map);
-      // }
-      cb(null, file);
+      if (err) {
+        console.error("Sass Error: " + err.message);
+      }
+      else {
+        file.contents = result.buffer;
+        // if (file.sourceMap) {
+          // applySourceMap(file, result.map);
+        // }
+      }
+      cb(err, file);
     });
   });
 }

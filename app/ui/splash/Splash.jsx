@@ -20,8 +20,8 @@ export default class SplashScreen extends React.Component {
         <img className="splash-logo" src="images/Cyril.png" />
         <p>by Jahi Crouch</p>
         <p><a href onClick={ this.openGitHub }>GitHub Page</a></p>
+        <p><Link state="menu">Continue</Link></p>
       </div>
     );
   }
 }
-// <p><Link state="menu">Continue</Link></p>
