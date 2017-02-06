@@ -1,5 +1,3 @@
-'use strict';
-
 const gulp = require('gulp'),
   // sourcemaps = require('gulp-sourcemaps'),
   // applySourceMap = require('vinyl-sourcemaps-apply'),

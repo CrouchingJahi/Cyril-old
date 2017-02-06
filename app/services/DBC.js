@@ -7,10 +7,11 @@ export class Transaction {
   constructor(properties) {
     this.id = properties.id; // string
     this.name = properties.name; // string
+    this.memo = properties.memo; // string
     this.date = properties.date; // date
     this.type = properties.type; // string
     this.amount = properties.amount; // float
-    this.category = properties.category; // object (category tyoe)
+    this.category = properties.category; // object (category type)
   }
 }
 
@@ -29,7 +30,7 @@ export default class DBC {
     this.transactions = this.findCollection('transactions');
   }
 
-};
+}
 
 module.exports = DBC;
 module.exports.Transaction = Transaction;
