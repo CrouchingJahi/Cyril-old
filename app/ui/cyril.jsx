@@ -3,9 +3,11 @@ import { render } from 'react-dom';
 
 import Router from './router/Router';
 import SplashScreen from './splash/Splash';
+import MenuScreen from './menu/Menu';
 
 const routes = {
-  'splash': SplashScreen
+  'splash': SplashScreen,
+  'menu': MenuScreen
 };
 
 document.addEventListener("DOMContentLoaded", function(event) {
