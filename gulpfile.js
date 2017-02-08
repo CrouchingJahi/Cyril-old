@@ -9,7 +9,7 @@ const gulp = require('gulp'),
 
 const input = {
   jsx: 'app/ui/**/*.jsx',
-  sass: 'app/style/*.scss',
+  sass: 'app/style/style.scss',
   index: 'app/index.html'
 };
 const output = {

@@ -1,10 +1,11 @@
 require('babel-register');
-const {app, BrowserWindow} = require('electron');
+const { app, BrowserWindow } = require('electron');
 const client = require('electron-connect').client;
+const API = require('./services/API');
 
 var win;
 
-function createWindow () {
+app.on('ready', () => {
   win = new BrowserWindow({
     width: 1024,
     height: 768,
@@ -18,9 +19,8 @@ function createWindow () {
     win = null;
   });
   client.create(win);
-}
-
-app.on('ready', createWindow);
+  API.start();
+});
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
     app.quit();
