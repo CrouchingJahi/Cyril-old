@@ -50,6 +50,6 @@ export default class Router extends React.Component {
 
   render() {
     var Route = this.props.states[this.state.route];
-    return <Route />;
+    return <div id="router"><Route /></div>;
   }
 }

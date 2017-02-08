@@ -1,12 +1,10 @@
 require('babel-register');
 const {app, BrowserWindow} = require('electron');
 const client = require('electron-connect').client;
-const DBC  = require('./services/DBC');
 
-let win, dbc;
+var win;
 
 function createWindow () {
-  dbc = new DBC();
   win = new BrowserWindow({
     width: 1024,
     height: 768,

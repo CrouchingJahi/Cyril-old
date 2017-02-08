@@ -1,6 +1,6 @@
 {
-  "name": "cyril",
-  "version": "0.1.0",
+  "name": "Cyril",
+  "version": "0.1.1",
   "description": "A finance management app created in Node, Electron, and React",
   "main": "app/main.js",
   "author": "jc",

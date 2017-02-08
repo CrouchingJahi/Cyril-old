@@ -1,7 +1,7 @@
 import React from 'react';
 import { mount } from 'enzyme';
 
-import Router, { routeEvent } from '../../app/ui/router/Router.jsx';
+import Router, { routeEvent } from '../../app/ui/router/Router';
 
 describe('The Router component', () => {
   function TestRoute(props) {
@@ -28,7 +28,7 @@ describe('The Router component', () => {
     expect(component.state().route).toBe('test');
   });
   it('renders as the default route', () => {
-    expect(component.html()).toBe('<span>blah</span>');
+    expect(component.html()).toBe('<div id="router"><span>blah</span></div>');
   });
   it('listens to route events for changing states', () => {
     component.getDOMNode().dispatchEvent(routeEvent('next'));
@@ -36,7 +36,7 @@ describe('The Router component', () => {
   });
   it('renders as another route once switched', () => {
     component.getDOMNode().dispatchEvent(routeEvent('next'));
-    expect(component.html()).toBe('<p>foo</p>');
+    expect(component.html()).toBe('<div id="router"><p>foo</p></div>');
   });
   it('cannot route to an unregistered state', () => {
     /*

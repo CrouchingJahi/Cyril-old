@@ -1,15 +1,14 @@
-import DBC, { Transaction } from '../../app/services/DBC';
-import { app } from 'electron';
+import dbc, { Transaction } from '../../app/services/DBC';
+import { remote } from 'electron';
 
 describe('The DBC module', () => {
-  let db = new DBC();
   it('has a path to a folder for data storage', () => {
-    expect(app.getPath).toHaveBeenCalled();
-    expect(db.path).toBe('path/cyril/cyril.db');
+    expect(remote.app.getPath).toHaveBeenCalled();
+    expect(dbc.path).toBe('path/Cyril/cyril.db');
   });
 
   describe('has a collection for transactions that', () => {
-    let collection = db.transactions;
+    let collection = dbc.transactions;
 
     it('exists', () => {
       expect(collection).toBeDefined();

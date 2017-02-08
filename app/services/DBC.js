@@ -1,7 +1,14 @@
 import Loki from 'lokijs';
-import { app } from 'electron';
+import { remote } from 'electron';
 import path from 'path';
 import lokiCryptedFileAdapter from 'lokijs/src/loki-crypted-file-adapter';
+
+export class Account {
+  constructor(id) {
+    this.id = id;
+    this.transactions = [];
+  }
+}
 
 export class Transaction {
   constructor(properties) {
@@ -15,22 +22,27 @@ export class Transaction {
   }
 }
 
-export default class DBC {
-  findCollection(name) {
-    return this.data.getCollection(name) || this.data.addCollection(name);
-  }
-
+class DBC {
   constructor(options) {
     let lokiOptions = Object.assign({
       adapter: lokiCryptedFileAdapter
     }, options);
-    this.path = path.join(app.getPath('appData'), 'cyril', 'cyril.db');
+    this.path = path.join(remote.app.getPath('appData'), 'Cyril', 'cyril.db');
     this.data = new Loki(this.path, lokiOptions);
 
+    this.accounts = this.findCollection('accounts');
     this.transactions = this.findCollection('transactions');
+  }
+
+  findCollection(name) {
+    return this.data.getCollection(name) || this.data.addCollection(name);
+  }
+
+  getAccounts() {
+    return [];
   }
 
 }
 
-module.exports = DBC;
-module.exports.Transaction = Transaction;
+let instance = new DBC();
+export default instance;
