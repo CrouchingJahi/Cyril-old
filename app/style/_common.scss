@@ -1,3 +1,5 @@
+@import 'variables';
+
 body {
   background-color: $dgray;
   color: $lgreen;
@@ -11,4 +13,31 @@ a {
 }
 a:hover {
   color: $gold;
+}
+
+input[type="file"] {
+  display: none;
+}
+
+input {
+  background-color: $white;
+  color: $black;
+  border: 1px solid $black;
+  border-radius: 4px;
+  padding: 0.25em 0.5em;
+  font-size: 0.75em;
+}
+
+button, label.file-input {
+  background-color: $lgray;
+  color: $cream;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.8em;
+  padding: 0.4em 0.6em;
+}
+
+label.file-input {
+  margin-right: 1em;
 }

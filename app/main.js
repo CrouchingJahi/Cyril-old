@@ -19,7 +19,11 @@ app.on('ready', () => {
     win = null;
   });
   client.create(win);
-  API.start();
+  API.start(status => {
+    if (status) {
+      console.log('API layer started successfully.');
+    }
+  });
 });
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {

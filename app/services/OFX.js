@@ -1,7 +1,7 @@
-import * as ofx from 'ofx';
 import { Transaction } from './DBC';
+import { parse } from 'banking';
 
-export default class OFXParser {
+export default class Parser {
   static dateOf(datestring) {
     let year = parseInt(datestring.slice(0, 4)),
         month = parseInt(datestring.slice(4, 6) - 1),
@@ -13,28 +13,30 @@ export default class OFXParser {
     return new Date(year, month, day, hour, minute, second);
   }
   //TODO There are multiple types of accounts in the OFX format. Somehow, a way will be needed to check CREDITCARDMSGSRSV1, or BANKMSGSRSV1, etc. for info
-  static parseFile(file) {
-    var data = ofx.parse(file.toString());
-    let transactions = data.OFX.CREDITCARDMSGSRSV1.CCSTMTTRNRS.CCSTMTRS.BANKTRANLIST.STMTTRN
+  static parseFile(file, cb) {
+    parse(file, parsed => {
+      let data = parsed.body;
+      let transactions = data.OFX.CREDITCARDMSGSRSV1.CCSTMTTRNRS.CCSTMTRS.BANKTRANLIST.STMTTRN
       .filter(trn => parseFloat(trn.TRNAMT) < 0)
       .map(trn => new Transaction({
         id: trn.FITID,
         name: trn.NAME,
         memo: trn.MEMO,
-        date: OFXParser.dateOf(trn.DTPOSTED),
+        date: Parser.dateOf(trn.DTPOSTED),
         type: trn.TRNTYPE,
         amount: Math.abs(parseFloat(trn.TRNAMT))
       }));
 
-    return {
-      bank: data.OFX.SIGNONMSGSRSV1.SONRS.FI.ORG,
-      fid: data.OFX.SIGNONMSGSRSV1.SONRS.FI.FID,
-      account: data.OFX.CREDITCARDMSGSRSV1.CCSTMTTRNRS.CCSTMTRS.CCACCTFROM.ACCTID,
-      startDate: OFXParser.dateOf(data.OFX.CREDITCARDMSGSRSV1.CCSTMTTRNRS.CCSTMTRS.BANKTRANLIST.DTSTART),
-      endDate: OFXParser.dateOf(data.OFX.CREDITCARDMSGSRSV1.CCSTMTTRNRS.CCSTMTRS.BANKTRANLIST.DTEND),
-      transactions: transactions
-    };
+      cb({
+        bank: data.OFX.SIGNONMSGSRSV1.SONRS.FI.ORG,
+        fid: data.OFX.SIGNONMSGSRSV1.SONRS.FI.FID,
+        account: data.OFX.CREDITCARDMSGSRSV1.CCSTMTTRNRS.CCSTMTRS.CCACCTFROM.ACCTID,
+        startDate: Parser.dateOf(data.OFX.CREDITCARDMSGSRSV1.CCSTMTTRNRS.CCSTMTRS.BANKTRANLIST.DTSTART),
+        endDate: Parser.dateOf(data.OFX.CREDITCARDMSGSRSV1.CCSTMTTRNRS.CCSTMTRS.BANKTRANLIST.DTEND),
+        transactions: transactions
+      });
+    });
   }
 }
 
-module.exports = OFXParser;
+module.exports = Parser;

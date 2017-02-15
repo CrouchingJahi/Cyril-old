@@ -9,7 +9,7 @@ const gulp = require('gulp'),
 
 const input = {
   jsx: 'app/ui/**/*.jsx',
-  sass: 'app/style/style.scss',
+  sass: 'app/style/*.scss',
   index: 'app/index.html'
 };
 const output = {
@@ -51,7 +51,7 @@ gulp.task('clean', function () {
 });
 
 // dart-sass is young, and it does not yet support source maps.
-// The functionality is here, though, for whenever it's added.
+// The issue tracking is here, though, for whenever it's added.
 // https://github.com/sass/dart-sass/issues/2
 gulp.task('build:css', function () {
   gulp.src(input.sass)

@@ -4,15 +4,16 @@ import { render } from 'react-dom';
 import Router from './router/Router';
 import SplashScreen from './splash/Splash';
 import MenuScreen from './menu/Menu';
+import UploadScreen from './upload/Upload';
 
 const routes = {
   'splash': SplashScreen,
-  'menu': MenuScreen
+  'menu': MenuScreen,
+  'upload': UploadScreen,
 };
 
-document.addEventListener("DOMContentLoaded", function(event) {
-  var container = document.getElementById('cyril');
+document.addEventListener("DOMContentLoaded", () => {
   render(
     <Router states={routes} default="splash" />
-  , container);
+  , document.getElementById('cyril'));
 });
