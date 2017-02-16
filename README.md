@@ -37,6 +37,9 @@ This project uses Gulp for its build processes. These are the commands available
 
 ## Developer's Guide  
 
+#### Issues & Solutions
+If you get an error along the lines of `require is not a constructor`, then this is because of an error in how one of the dependencies is written. You will have to go into `node_modules/banking/lib/ofx.js` and change the line that says `var parser = new require('xml2js').Parser({explicitArray: false})` so that it has parentheses - `var parser = new (require('xml2js')).Parser({explicitArray: false})`.
+
 #### Merge Process
 On Github, click the "Projects" tab on the top bar to reach the board. When you decide to work on something, pick the issue and assign it to yourself, and move the card on the board.  
 Your work should go into another branch, then you can push it up and use a merge request to get it into master.  

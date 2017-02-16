@@ -1,5 +1,5 @@
 import Loki from 'lokijs';
-import { remote } from 'electron';
+import { app } from 'electron';
 import path from 'path';
 import lokiCryptedFileAdapter from 'lokijs/src/loki-crypted-file-adapter';
 
@@ -23,23 +23,53 @@ export class Transaction {
 }
 
 class DBC {
-  constructor(options) {
+  constructor(options={}) {
+    this.path = path.join(app.getPath('appData'), 'Cyril', 'cyril.db');
+    lokiCryptedFileAdapter.setSecret(this.path);
     let lokiOptions = Object.assign({
-      adapter: lokiCryptedFileAdapter
+      adapter: lokiCryptedFileAdapter,
+      autosave: true
     }, options);
-    this.path = path.join(remote.app.getPath('appData'), 'Cyril', 'cyril.db');
     this.data = new Loki(this.path, lokiOptions);
-
-    this.accounts = this.findCollection('accounts');
-    this.transactions = this.findCollection('transactions');
+  }
+  
+  initialize() {
+    let dbc = this;
+    let collOpts = {
+      unique: ['id'],
+      indices: ['id']
+    };
+    let resolvePromise = function (resolve) {
+      dbc.accounts = dbc.findCollection('accounts', collOpts);
+      resolve();
+    }
+    return new Promise((resolve, reject) => {
+      dbc.data.loadDatabase({}, (err) => {
+        if (err) {
+          if (err.code == 'ENOENT') {
+            resolvePromise(resolve);
+          }
+          else {
+            reject(err);
+          }
+        }
+        else {
+          resolvePromise(resolve);
+        }
+      });
+    });
   }
 
-  findCollection(name) {
-    return this.data.getCollection(name) || this.data.addCollection(name);
+  findCollection(name, opts) {
+    return this.data.getCollection(name) || this.data.addCollection(name, opts);
+  }
+
+  getAccount(id) {
+    return this.accounts.findOne({id: id}) || this.accounts.insert(new Account(id));
   }
 
   getAccounts() {
-    return [];
+    return this.accounts.find();
   }
 
 }

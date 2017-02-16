@@ -1,36 +1,86 @@
-import dbc, { Transaction } from '../../app/services/DBC';
-import { remote } from 'electron';
+import dbc, { Account, Transaction } from '../../app/services/DBC';
+import { app } from 'electron';
 
 describe('The DBC module', () => {
+  beforeAll(() => {
+    return dbc.initialize();
+  });
+  
   it('has a path to a folder for data storage', () => {
-    expect(remote.app.getPath).toHaveBeenCalled();
     expect(dbc.path).toBe('path/Cyril/cyril.db');
   });
+  
+  it('continues anyway if an ENOENT error happens while initializing', (done) => {
+    var errDbc = Proxy.revocable(dbc.data, {});
+    errDbc.proxy.loadDatabase = function (opts, cb) {
+      cb({
+        code: 'ENOENT',
+        message: 'unit test mock error'
+      });
+    }
+    dbc.initialize().then(() => {
+      done();
+    });
+    errDbc.revoke();
+  });
+  it('rejects its promise gracefully if an error happens while initalizing', (done) => {
+    var errDbc = Proxy.revocable(dbc.data, {});
+    errDbc.proxy.loadDatabase = function (opts, cb) {
+      cb(new Error('unit test mock error'));
+    }
+    dbc.initialize().catch(err => {
+      done();
+    });
+    errDbc.revoke();
+  });
 
-  describe('has a collection for transactions that', () => {
-    let collection = dbc.transactions;
-
+  describe('has a collection for accounts that', () => {
     it('exists', () => {
-      expect(collection).toBeDefined();
-      expect(collection.count()).toBe(0);
+      expect(dbc.accounts).toBeDefined();
+      expect(dbc.accounts.count()).toBe(0);
     });
 
-    it('can insert or retrieve a transaction', () => {
-      let transaction = new Transaction({
-        id: 'id',
-        name: 'name',
-        date: new Date(),
-        type: 'type',
-        amount: 3.50
-      });
-      collection.insert(transaction);
-      expect(collection.count()).toBe(1);
-      var retrieved = collection.findOne();
-      expect(retrieved.id).toBe(transaction.id);
-      expect(retrieved.name).toBe(transaction.name);
-      expect(retrieved.date).toBe(transaction.date);
-      expect(retrieved.type).toBe(transaction.type);
-      expect(retrieved.amount).toBe(transaction.amount);
+    it('can insert or retrieve an account', () => {
+      let account = new Account('id');
+      expect(account.id).toEqual('id');
+      expect(account.transactions).toEqual([]);
+      dbc.accounts.insert(account);
+      expect(dbc.accounts.count()).toBe(1);
+      var retrieved = dbc.accounts.findOne();
+      expect(retrieved.id).toBe(account.id);
+      expect(retrieved.transactions).toBe(account.transactions);
+    });
+  });
+
+  describe('getAccounts function', () => {
+    beforeEach(() => dbc.accounts.clear());
+    it('returns an empty list if the database has no accounts', () => {
+      expect(dbc.getAccounts()).toEqual([]);
+    });
+    it('returns a list of any accounts already stored in the database', () => {
+      dbc.accounts.insert(new Account('id1'));
+      dbc.accounts.insert(new Account('id2'));
+      dbc.accounts.insert(new Account('id3'));
+      expect(dbc.getAccounts().length).toBe(3);
+    });
+  });
+  
+  describe('getAccount function', () => {
+    beforeEach(() => dbc.accounts.clear());
+    it('returns the specified account by id', () => {
+      let account = new Account('blah');
+      account.transactions.push(new Transaction({id: '1234'}));
+      dbc.accounts.insert(account);
+      let retrievedAccount = dbc.getAccount('blah');
+      expect(retrievedAccount.id).toBe('blah');
+      expect(retrievedAccount.transactions.length).toEqual(1);
+      expect(retrievedAccount.transactions[0].id).toEqual('1234');
+    });
+    
+    it('returns a new account with the specified id if none already exists', () => {
+      expect(dbc.accounts.find().length).toBe(0);
+      let account = dbc.getAccount('bleh');
+      expect(dbc.accounts.find().length).toBe(1);
     });
   });
 });

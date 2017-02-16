@@ -1,7 +1,6 @@
 module.exports = {
-  remote: { app: {
-    getVersion: jest.genMockFunction(),
-    getPath: jest.fn().mockReturnValue('path')
-  } },
-  shell: { openExternal: jest.genMockFunction() }
+  remote: { app: { getVersion: jest.genMockFunction() } },
+  app: { getPath: jest.fn().mockReturnValue('path') },
+  shell: { openExternal: jest.genMockFunction() },
+  ipcMain: { on: jest.genMockFunction() }
 };
