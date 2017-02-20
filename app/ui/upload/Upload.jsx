@@ -43,7 +43,7 @@ export default class UploadScreen extends React.Component {
   render() {
     return (
       <div id="upload">
-        <Link state="menu">&lt; Back to Menu</Link>
+        <Link state="menu">&#8249; Back to Menu</Link>
         <h2>Upload</h2>
         <label className="file-input">
           <input type="file" name="ofx" accept=".ofx,.qfx" onChange={this.fileSelected}></input>

@@ -4,8 +4,9 @@ import path from 'path';
 import lokiCryptedFileAdapter from 'lokijs/src/loki-crypted-file-adapter';
 
 export class Account {
-  constructor(id) {
+  constructor(id, name) {
     this.id = id;
+    this.name = name;
     this.transactions = [];
   }
 }

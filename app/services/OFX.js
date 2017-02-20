@@ -1,5 +1,23 @@
 import { Transaction } from './DBC';
-import { parse } from 'banking';
+import { Parser as XMLParser } from 'xml2js';
+
+function sgml2Xml(sgml) {
+  return sgml
+    .replace(/>\s+</g, '><') // whitespace between tag close/open
+    .replace(/\s+</g, '<')   // whitespace before a close tag
+    .replace(/>\s+/g, '>')   // whitespace after a close tag
+    .replace(/<([A-Z0-9_]*)+\.+([A-Z0-9_]*)>([^<]+)/g, '<\$1\$2>\$3')
+    .replace(/<(\w+?)>([^<]+)/g, '<\$1>\$2</\$1>');
+}
+
+function parse(file, cb) {
+  var parser = new XMLParser({explicitArray: false});
+  var content = '<OFX>' + file.split('<OFX>', 2)[1];
+
+  parser.parseString(sgml2Xml(content), (err, result) => {
+    cb(result);
+  });
+}
 
 export default class Parser {
   static dateOf(datestring) {
@@ -14,8 +32,7 @@ export default class Parser {
   }
   //TODO There are multiple types of accounts in the OFX format. Somehow, a way will be needed to check CREDITCARDMSGSRSV1, or BANKMSGSRSV1, etc. for info
   static parseFile(file, cb) {
-    parse(file, parsed => {
-      let data = parsed.body;
+    parse(file, data => {
       let transactions = data.OFX.CREDITCARDMSGSRSV1.CCSTMTTRNRS.CCSTMTRS.BANKTRANLIST.STMTTRN
       .filter(trn => parseFloat(trn.TRNAMT) < 0)
       .map(trn => new Transaction({
