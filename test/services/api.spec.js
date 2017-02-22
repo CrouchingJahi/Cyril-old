@@ -4,6 +4,11 @@ import API from '../../app/services/API';
 import dbc, { Account, Transaction } from '../../app/services/DBC';
 
 describe('The API module', () => {
+  let eventResponse;
+  let mockEvent = { sender: {
+    send: jest.fn((e, args) => eventResponse = args)
+  } };
+
   beforeAll(() => {
     return dbc.initialize();
   });
@@ -16,10 +21,6 @@ describe('The API module', () => {
   });
   
   describe('fileUploadHandler function', () => {
-    let eventResponse;
-    let mockEvent = { sender: {
-      send: jest.fn((e, args) => eventResponse = args)
-    } };
     beforeEach(() => {
       eventResponse = null;
       dbc.accounts.clear();
@@ -32,7 +33,7 @@ describe('The API module', () => {
         transactionsFound: 3
       };
       API.fileUploadHandler(mockEvent, MockQFX);
-      expect(mockEvent.sender.send).toHaveBeenCalledWith('upload-complete', expectedInfo);
+      expect(mockEvent.sender.send).toHaveBeenCalledWith('uploaded-file', expectedInfo);
     });
     it('saves the account to the database if it doesnt already exist', () => {
       expect(dbc.accounts.find().length).toBe(0);
@@ -65,6 +66,51 @@ describe('The API module', () => {
       expect(eventResponse.transactionsFound).toBe(3);
       expect(eventResponse.duplicatesFound).toBe(1);
       expect(eventResponse.accountExisted).toBe(true);
+    });
+  });
+
+  describe('addAccountHandler function', () => {
+
+    beforeEach(() => {
+      eventResponse = null;
+      dbc.accounts.clear();
+      dbc.accounts.constraints.unique.id.clear();
+    });
+
+    it('sends a reference to the newly created account', () => {
+      let mockData = {
+        id: 'test-account',
+        name: 'unittest'
+      };
+      API.addAccountHandler(mockEvent, mockData);
+
+      expect(eventResponse.id).toEqual(mockData.id);
+      expect(eventResponse.name).toEqual(mockData.name);
+    });
+    it('if the account already exists, renames it', () => {
+      let mockData = {
+        id: 'test-account',
+        name: 'unittest'
+      };
+      let acct = new Account(mockData.id, 'blah');
+      acct.transactions.push(new Transaction({id: 'one'}));
+      acct.transactions.push(new Transaction({id: 'two'}));
+      acct.transactions.push(new Transaction({id: 'three'}));
+      dbc.accounts.insert(acct);
+
+      API.addAccountHandler(mockEvent, mockData);
+
+      expect(eventResponse.id).toEqual(mockData.id);
+      expect(eventResponse.name).toEqual(mockData.name);
+      expect(eventResponse.transactions.length).toEqual(3);
+    });
+
+    describe('getAccountsHandler function', () => {
+      it('returns the list of stored accounts', () => {
+        dbc.accounts.insert(new Account('unittest'));
+        API.getAccountsHandler(mockEvent);
+        expect(eventResponse.length).toBe(1);
+      });
     });
   });
 });

@@ -5,6 +5,9 @@
   "main": "app/main.js",
   "author": "jc",
   "license": "MIT",
+  "engines" : {
+    "node" : ">=6.0.0"
+  },
   "dependencies": {
     "electron": "~1.4.15",
     "lokijs": "~1.4.2",

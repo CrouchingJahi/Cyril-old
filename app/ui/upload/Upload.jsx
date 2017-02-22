@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from '../router/Link';
-import { ipcRenderer } from 'electron';
+import Services from '../services/Services';
 
 export default class UploadScreen extends React.Component {
   constructor(props) {
@@ -14,10 +14,9 @@ export default class UploadScreen extends React.Component {
       file: null
     };
     this.reader = new FileReader();
-    this.reader.onload = this.processFile;
-    ipcRenderer.on('upload-complete', (event, data) => {
-      console.log(data.transactionsFound + ' records processed.');
-    });
+    this.reader.onload = () => {
+      Services.uploadFile(this.reader.result, this.processFile);
+    };
   }
 
   fileSelected(e) {
@@ -35,9 +34,9 @@ export default class UploadScreen extends React.Component {
     }
   }
   
-  processFile() {
-    ipcRenderer.on('upload-complete', (e,d) => console.log({e:e,d:d}));
-    var bankData = ipcRenderer.send('file-upload', this.reader.result);
+  processFile(results) {
+    console.log(results);
+    // do stuff with results
   }
   
   render() {

@@ -7,16 +7,22 @@ describe('the services module', () => {
       done();
     });
   });
-  
+
   it('addAccount() adds an account', () => {
     let expectedId = 'unit';
     let expectedName = 'test';
     Services.addAccount(expectedId, expectedName);
     expect(ipcRenderer.send).toHaveBeenCalledWith('add-account', {id: expectedId, name: expectedName});
   });
-  
-  it('addAccount() calls callback once it\'s finished, if supplied', (done) => {
+
+  it('addAccount() uses callback', (done) => {
     Services.addAccount('test', 'account', () => {
+      done();
+    });
+  });
+
+  it('uploadFile() uses callback', (done) => {
+    Services.uploadFile('', () => {
       done();
     });
   });

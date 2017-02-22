@@ -43,22 +43,29 @@ describe('The settings screen', () => {
     
     it('renders when accounts exist', () => {
       let mockAccounts = [
-        new Account('id', 'name')
+        new Account('id', 'name'),
+        new Account('id2')
       ];
       submenu.setState({accounts: mockAccounts});
       expect(submenu.html()).toBeDefined();
     });
     
+    it('inputChange changes state to update text fields', () => {
+      submenu.getNode().inputChange({target: { name: 'id', value: 'test' }});
+      expect(submenu.state().input_id).toBe('test');
+    });
+    
     describe('addAccount method', () => {
+      let e = { preventDefault: jest.genMockFunction() };
       it('shows an error if no text was given for the account ID', () => {
-        submenu.setState({inputId: '', inputName: ''})
-        submenu.getNode().addAccount();
+        submenu.setState({input_id: '', input_name: ''})
+        submenu.getNode().addAccount(e);
         expect(submenu.state().inputValid).toBeFalsy();
       });
       
       it('adds to database if an account ID is given', () => {
-        submenu.setState({inputId: 'test', inputName: 'account'});
-        submenu.getNode().addAccount();
+        submenu.setState({input_id: 'test', input_name: 'account'});
+        submenu.getNode().addAccount(e);
         expect(submenu.state().inputValid).toBeTruthy();
         expect(ipcRenderer.send).toHaveBeenCalledWith('add-account', {id: 'test', name: 'account'});
       });

@@ -8,9 +8,10 @@ const gulp = require('gulp'),
   electron = require('electron-connect').server.create();
 
 const input = {
-  jsx: 'app/ui/**/*.jsx',
-  sass: 'app/style/*.scss',
-  index: 'app/index.html'
+  index: 'app/index.html',
+  style: 'app/style/*.scss',
+  frontend: 'app/ui/**/*.jsx',
+  backend: 'app/services/*.js'
 };
 const output = {
   dir: 'app',
@@ -54,7 +55,7 @@ gulp.task('clean', function () {
 // The issue tracking is here, though, for whenever it's added.
 // https://github.com/sass/dart-sass/issues/2
 gulp.task('build:css', function () {
-  gulp.src(input.sass)
+  gulp.src(input.style)
     // .pipe(sourcemaps.init())
     .pipe(sassify())
     // .pipe(sourcemaps.write(output.path('cssmap')))
@@ -63,17 +64,14 @@ gulp.task('build:css', function () {
 });
 gulp.task('build', ['build:css']);
 
-gulp.task('watch:sass', function () {
-  gulp.watch(input.sass, ['build:css']);
-});
-gulp.task('watch', ['watch:sass']);
-
 gulp.task('serve', function () {
   electron.start();
 });
 
-gulp.task('dev', ['watch', 'serve'], function () {
-  gulp.watch([input.jsx, input.sass], electron.reload);
+gulp.task('dev', ['serve'], function () {
+  gulp.watch(input.style, ['build:css', electron.reload]);
+  gulp.watch(input.frontend, electron.reload);
+  gulp.watch(input.backend, electron.restart);
 });
 
 gulp.task('default', ['clean', 'build', 'dev']);

@@ -41,3 +41,11 @@ button, label.file-input {
 label.file-input {
   margin-right: 1em;
 }
+
+input.error {
+  border-color: $red;
+}
+
+.error {
+  color: $red;
+}

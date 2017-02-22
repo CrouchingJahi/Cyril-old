@@ -21,13 +21,26 @@ export default class API {
         }
       });
 
-      event.sender.send('upload-complete', feedback);
+      event.sender.send('uploaded-file', feedback);
     });
+  }
+
+  static addAccountHandler(event, data) {
+    let account = dbc.getAccount(data.id);
+    account.name = data.name;
+
+    event.sender.send('added-account', account);
+  }
+
+  static getAccountsHandler(event) {
+    event.sender.send('send-accounts', dbc.getAccounts());
   }
 
   static start(cb) {
     dbc.initialize().then(() => {
-      ipcMain.on('file-upload', API.fileUploadHandler);
+      ipcMain.on('upload-file', API.fileUploadHandler);
+      ipcMain.on('add-account', API.addAccountHandler);
+      ipcMain.on('get-accounts', API.getAccountsHandler);
       cb(1);
     });
   }

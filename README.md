@@ -1,10 +1,11 @@
 # Cyril
-Finance management desktop app created in Node, Electron, and React
+Finance management desktop app created in Node, Electron, and React.  
+Developed using Node 6.9.4. no other version is tested to work with this application.
 
 This project uses Gulp, so in order to develop with it, you must have gulp-cli installed (`npm install -g gulp-cli` or `yarn global add gulp-cli`)  
 - Build dependencies using `npm install` or `yarn`  
-- Build app using `gulp build`  
-- Run app in live reload mode using `gulp serve` - app will automatically restart when a source file is changed  
+- Build app using `npm run build` or `gulp build`  
+- Run app in live reload mode using `npm run serve` or `gulp serve` - app will automatically restart when a source file is changed  
 -OR-  
  Run app normally using `npm start`
 
@@ -25,13 +26,9 @@ This project uses Gulp for its build processes. These are the commands available
 - `gulp build:css`
  - Compiles all the sass in the `app/style` folder into `app/ui/cyril.css`.
 - `gulp serve`
- - Starts an instance of electron, same as `npm start`.
-- `gulp watch:sass`
- - Watches and automatically runs `gulp build:css` if a change is detected in any of the sass files.
-- `gulp watch`
- - Same as `gulp watch:sass`
+ - Starts an instance of electron.
 - `gulp dev`
- - Runs `grunt watch` and `grunt serve`. Also, if a change is detected in the CSS or JSX, the electron window restarts.
+ - Runs `grunt serve`. Also, if a change is detected in the code, the electron window restarts.
 - `gulp`
  - The default task performs a sequence of `clean`, `build`, then `dev`.
 

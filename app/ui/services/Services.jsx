@@ -1,19 +1,24 @@
 import { ipcRenderer } from 'electron';
 
+function doService(command, response, data, cb) {
+  ipcRenderer.once(response, (e,d) => {
+    if (cb) {
+      cb(d);
+    }
+  });
+  ipcRenderer.send(command, data);
+}
+
 export default class Services {
-  static getAccounts(cb) {
-    ipcRenderer.once('send-accounts', (e,d) => {
-      cb(d || []);
-    });
-    ipcRenderer.send('get-accounts');
+  static uploadFile(file, cb) {
+    doService('upload-file', 'uploaded-file', file, cb);
   }
-  
+
+  static getAccounts(cb) {
+    doService('get-accounts', 'send-accounts', null, cb);
+  }
+
   static addAccount(id, name, cb) {
-    ipcRenderer.once('added-account', (e,d) => {
-      if (cb) {
-        cb(d);
-      }
-    });
-    ipcRenderer.send('add-account', { id, name });
+    doService('add-account', 'added-account', {id, name}, cb);
   }
 }
