@@ -36,11 +36,23 @@ export default class API {
     event.sender.send('send-accounts', dbc.getAccounts());
   }
 
+  static deleteAccountHandler(event, id) {
+    dbc.accounts.findAndRemove({id});
+    event.sender.send('deleted-account');
+  }
+
+  static editAccountHandler(event, data) {
+    let account = dbc.editAccount(data.old_id, data.new_id, data.new_name);
+    event.sender.send('edited-account', account);
+  }
+
   static start(cb) {
     dbc.initialize().then(() => {
       ipcMain.on('upload-file', API.fileUploadHandler);
       ipcMain.on('add-account', API.addAccountHandler);
       ipcMain.on('get-accounts', API.getAccountsHandler);
+      ipcMain.on('delete-account', API.deleteAccountHandler);
+      ipcMain.on('edit-account', API.editAccountHandler);
       cb(1);
     });
   }

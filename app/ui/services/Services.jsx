@@ -21,4 +21,12 @@ export default class Services {
   static addAccount(id, name, cb) {
     doService('add-account', 'added-account', {id, name}, cb);
   }
+
+  static deleteAccount(id, cb) {
+    doService('delete-account', 'deleted-account', id, cb);
+  }
+
+  static editAccount(old_id, new_id, new_name, cb) {
+    doService('edit-account', 'edited-account', {old_id, new_id, new_name}, cb);
+  }
 }

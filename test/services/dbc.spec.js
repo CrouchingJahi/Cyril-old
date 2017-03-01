@@ -68,11 +68,12 @@ describe('The DBC module', () => {
   describe('getAccount function', () => {
     beforeEach(() => dbc.accounts.clear());
     it('returns the specified account by id', () => {
-      let account = new Account('blah');
+      let id = 'unit-dbc-getAccount';
+      let account = new Account(id);
       account.transactions.push(new Transaction({id: '1234'}));
       dbc.accounts.insert(account);
-      let retrievedAccount = dbc.getAccount('blah');
-      expect(retrievedAccount.id).toBe('blah');
+      let retrievedAccount = dbc.getAccount(id);
+      expect(retrievedAccount.id).toBe(id);
       expect(retrievedAccount.transactions.length).toEqual(1);
       expect(retrievedAccount.transactions[0].id).toEqual('1234');
     });
@@ -81,6 +82,28 @@ describe('The DBC module', () => {
       expect(dbc.accounts.find().length).toBe(0);
       let account = dbc.getAccount('bleh');
       expect(dbc.accounts.find().length).toBe(1);
+    });
+  });
+
+  describe('editAccount function', () => {
+    beforeEach(() => dbc.accounts.clear());
+    it('changes the name and id of the specified account', () => {
+      let newId = 'unit-dbc-editAccount';
+      let newName = 'Edit Account';
+      let account = new Account('old-id');
+      let expectedAccount = new Account(newId, newName);
+      let transactions = [
+        new Transaction({id: 't1'}),
+        new Transaction({id: 't2'}),
+        new Transaction({id: 't3'})
+      ];
+      transactions.forEach(t => {
+        account.transactions.push(t);
+        expectedAccount.transactions.push(t);
+      });
+      dbc.accounts.insert(account);
+      dbc.editAccount(account.id, newId, newName);
+      expect(dbc.accounts.find({id: newId})).toEqual([expect.objectContaining(expectedAccount)]);
     });
   });
 });

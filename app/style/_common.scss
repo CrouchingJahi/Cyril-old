@@ -7,6 +7,11 @@ body {
   font-family: "Elliot Sans", sans-serif;
 }
 
+hr {
+  border: 2px solid currentColor;
+  border-radius: 4px;
+}
+
 a {
   color: $cream;
   text-decoration: none;
@@ -48,4 +53,8 @@ input.error {
 
 .error {
   color: $red;
+}
+
+.small {
+  font-size: 0.6em;
 }

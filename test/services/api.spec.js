@@ -12,14 +12,14 @@ describe('The API module', () => {
   beforeAll(() => {
     return dbc.initialize();
   });
-  
+
   it('has a start method to activate endpoints', (done) => {
     API.start(() => {
       expect(ipcMain.on).toHaveBeenCalled();
       done();
     });
   });
-  
+
   describe('fileUploadHandler function', () => {
     beforeEach(() => {
       eventResponse = null;
@@ -104,13 +104,37 @@ describe('The API module', () => {
       expect(eventResponse.name).toEqual(mockData.name);
       expect(eventResponse.transactions.length).toEqual(3);
     });
+  });
 
-    describe('getAccountsHandler function', () => {
-      it('returns the list of stored accounts', () => {
-        dbc.accounts.insert(new Account('unittest'));
-        API.getAccountsHandler(mockEvent);
-        expect(eventResponse.length).toBe(1);
-      });
+  describe('getAccountsHandler function', () => {
+    it('returns the list of stored accounts', () => {
+      let id = 'unit-api-getAccountsHandler';
+      let accts = dbc.accounts.find().length;
+      dbc.accounts.insert(new Account('unittest'));
+      API.getAccountsHandler(mockEvent);
+      expect(eventResponse.length).toBe(accts + 1);
+    });
+  });
+
+  describe('deleteAccountHandler function', () => {
+    it('removes the specified account', () => {
+      let id = 'unit-api-deleteAccountHandler';
+      dbc.accounts.insert(new Account(id));
+      API.deleteAccountHandler(mockEvent, id);
+      expect(dbc.accounts.find({id})).toEqual([]);
+    });
+  });
+  
+  describe('editAccountHandler function', () => {
+    it('modifies the specified account', () => {
+      let data = {
+        old_id: 'unit-api-editAccountHandler-old',
+        new_id: 'unit-api-editAccountHandler',
+        new_name: 'blah'
+      };
+      dbc.editAccount = jest.genMockFunction();
+      API.editAccountHandler(mockEvent, data);
+      expect(dbc.editAccount).toHaveBeenCalledWith(data.old_id, data.new_id, data.new_name);
     });
   });
 });

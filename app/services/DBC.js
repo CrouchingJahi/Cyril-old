@@ -73,6 +73,14 @@ class DBC {
     return this.accounts.find();
   }
 
+  editAccount(old_id, new_id, new_name) {
+    var account = this.accounts.findOne({id: old_id});
+    account.id = new_id;
+    account.name = new_name;
+    this.accounts.update(account);
+    return account;
+  }
+
 }
 
 let instance = new DBC();
