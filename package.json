@@ -5,13 +5,14 @@
   "main": "app/main.js",
   "author": "jc",
   "license": "MIT",
-  "engines" : {
-    "node" : ">=6.0.0"
+  "engines": {
+    "node": ">=6.0.0"
   },
   "dependencies": {
-    "electron": "~1.4.15",
-    "lokijs": "~1.4.2",
+    "electron": "^1.7.5",
+    "lokijs": "^1.4.3",
     "react": "~15.4.1",
+    "react-autocomplete": "^1.5.10",
     "react-dom": "~15.4.1",
     "xml2js": "^0.4.17"
   },
@@ -49,6 +50,7 @@
   "scripts": {
     "build": "gulp build",
     "serve": "gulp serve",
+    "dev": "gulp dev",
     "test": "jest"
   }
 }

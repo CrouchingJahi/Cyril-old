@@ -29,4 +29,12 @@ export default class Services {
   static editAccount(old_id, new_id, new_name, cb) {
     doService('edit-account', 'edited-account', {old_id, new_id, new_name}, cb);
   }
+
+  static getMatchers(cb) {
+    doService('get-matchers', 'send-matchers', null, cb);
+  }
+
+  static getCategorizations(cb) {
+    doService('get-cats', 'send-cats', null, cb);
+  }
 }

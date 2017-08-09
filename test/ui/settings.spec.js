@@ -2,10 +2,10 @@ import React from 'react';
 import { shallow, mount } from 'enzyme';
 import { ipcRenderer, remote } from 'electron';
 
-import { Account } from '../../app/services/DBC';
+import { Account, Matcher, Category } from '../../app/services/DBC';
 import Services from'../../app/ui/services/Services';
 import SettingsScreen from '../../app/ui/settings/Settings.jsx';
-import CategoriesSettingsMenu from '../../app/ui/settings/CategoriesSettings.jsx';
+import CategoriesSettingsMenu, { Listing } from '../../app/ui/settings/CategoriesSettings.jsx';
 import AccountSettingsMenu from '../../app/ui/settings/AccountSettings.jsx';
 
 describe('The settings screen', () => {
@@ -13,18 +13,17 @@ describe('The settings screen', () => {
 
   describe('renders', () => {
     it('a link for each menu', () => {
-      var links = component.html().match(/<a[^>]+>\w+<\/a>/g).map(link => link.match(/>(\w+)</)[1]);
-      var menus = Object.keys(component.getNode().menus);
-      expect(links).toEqual(menus);
+      var linkText = component.find('#settings-links a').map(n => n.text());
+      var menus = Object.keys(component.instance().menus);
+      expect(linkText).toEqual(menus);
     });
 
     it('the selected menu into its page depending on state', () => {
-      let submenu = () => component.html().match(/<hr>(.+)<\/div>/)[1];
+      let submenu = () => component.find('#settings-submenu').children().name();
       component.setState({selected: ''});
-      expect(submenu()).toEqual('<div></div>');
+      expect(submenu()).toBe('div');
       component.setState({selected: 'Categories'});
-      let categoriesComponent = shallow(<CategoriesSettingsMenu />)
-      expect(submenu()).toEqual(categoriesComponent.html());
+      expect(submenu()).toBe('CategoriesSettingsMenu');
     });
   });
 
@@ -174,5 +173,43 @@ describe('The account settings submenu', () => {
       submenu.getNode().deleteAccount(fakeEvent);
       expect(submenu.state().editingAccount).toBeNull();
     });
+  });
+});
+
+describe('the categories settings submenu', () => {
+  const submenu = mount(<CategoriesSettingsMenu />);
+
+  describe('renders', () => {
+    let listing = () => submenu.html().match(/<ul>(.*)<\/ul>/)[1];
+    
+    it('an empty list if no matchers are found', () => {
+      let matchers = [];
+      expect(listing()).toBe('');
+    });
+    it('a listing for each matcher', () => {
+      let matchers = [
+        new Matcher(/test/, new Category('test', 'unit', 'settings'))
+      ];
+      submenu.setState({matchers});
+      expect(listing()).not.toBe('');
+    });
+  });
+});
+
+describe('listing component', () => {
+  let mockEvent = { preventDefault: jest.fn() };
+  let matcher = new Matcher(/test/, new Category('test', 'unit', 'settings'));
+  let listing = mount(<Listing matcher={matcher} />);
+
+  it('has a simple onchange event for its input', () => {
+    expect(listing.state().edit_regex).toBe('/test/');
+    listing.instance().inputChange({target: { value: '/foo/' }});
+    expect(listing.state().edit_regex).toBe('/foo/');
+  });
+  it('has a click function that opens edit submenu', () => {
+    var closedLength = listing.html().length;
+    expect(listing.state().editing).toBeFalsy();
+    listing.instance().click(mockEvent);
+    expect(listing.state().editing).toBeTruthy();
   });
 });

@@ -14,6 +14,7 @@ Because of some of the dependencies, you may see an error along the lines of bei
 ## NPM Commands  
 `npm run build` - Same as using `gulp build`  
 `npm run serve` - Same as using `gulp serve`  
+`npm run dev` - Same as using `gulp dev`  
 `npm test` - Runs the test suite. To check coverage, visit the "coverage" folder that will be generated in the project directory.
 
 ---

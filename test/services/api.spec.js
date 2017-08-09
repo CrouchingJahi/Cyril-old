@@ -14,17 +14,32 @@ describe('The API module', () => {
   });
 
   it('has a start method to activate endpoints', (done) => {
-    API.start(() => {
+    API.start(feedback => {
+      expect(feedback).toBe(1);
       expect(ipcMain.on).toHaveBeenCalled();
       done();
     });
+  });
+
+  it('notifies the user if an error occurs while starting', () => {
+    let mock = Proxy.revocable(console, {});
+    mock.proxy.log = jest.fn();
+    let errormsg = 'unit test API spec';
+    dbc.initialize = jest.fn(() => {
+      return new Promise((res, rej) => {
+        rej(new Error(errormsg));
+      });
+    });
+    API.start(feedback => {
+      expect(feedback).toBe(0);
+    });
+    mock.revoke();
   });
 
   describe('fileUploadHandler function', () => {
     beforeEach(() => {
       eventResponse = null;
       dbc.accounts.clear();
-      dbc.accounts.constraints.unique.id.clear();
     });
     it('sends back information about the file that was processed', () => {
       let expectedInfo = {
@@ -74,7 +89,6 @@ describe('The API module', () => {
     beforeEach(() => {
       eventResponse = null;
       dbc.accounts.clear();
-      dbc.accounts.constraints.unique.id.clear();
     });
 
     it('sends a reference to the newly created account', () => {
@@ -135,6 +149,14 @@ describe('The API module', () => {
       dbc.editAccount = jest.genMockFunction();
       API.editAccountHandler(mockEvent, data);
       expect(dbc.editAccount).toHaveBeenCalledWith(data.old_id, data.new_id, data.new_name);
+    });
+  });
+
+  describe('getMatchersHandler function', () => {
+    it('returns dbc.getMatchers', () => {
+      dbc.getMatchers = jest.genMockFunction();
+      API.getMatchersHandler(mockEvent);
+      expect(dbc.getMatchers).toHaveBeenCalled();
     });
   });
 });

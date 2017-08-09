@@ -27,14 +27,18 @@ export default class SettingsScreen extends React.Component {
     var links = Object.keys(this.menus).map(menu => {
       return <p key={menu}><a className="blah" href onClick={this.showMenu}>{menu}</a></p>
     });
-    var Submenu = this.menus[this.state.selected] || 'div';
+    let Submenu = this.menus[this.state.selected] || 'div';
     return (
       <div id="settings">
-        <p><Link state="menu">&#8249; Back to Menu</Link></p>
+        <Link state="menu">&#8249; Back to Menu</Link>
         <h2>Settings</h2>
-        { links }
+        <div id="settings-links">
+          { links }
+        </div>
         <hr/>
-        <Submenu />
+        <div id="settings-submenu">
+          <Submenu />
+        </div>
       </div>
     );
   }

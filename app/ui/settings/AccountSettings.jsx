@@ -66,6 +66,9 @@ export default class AccountSettingsMenu extends React.Component {
         input_edit_valid: true
       });
       Services.editAccount(this.state.editingAccount.id, this.state.input_edit_id, this.state.input_edit_name, () => {
+        this.setState({
+          editingAccount: null
+        });
         this.updateAccounts();
       });
     }
@@ -105,7 +108,8 @@ export default class AccountSettingsMenu extends React.Component {
     this.setState({
       editingAccount: selecting ? account : null,
       input_edit_id: selecting ? account.id : '',
-      input_edit_name: selecting ? account.name || '' : ''
+      input_edit_name: selecting ? account.name || '' : '',
+      input_edit_valid: true
     });
   }
 
@@ -122,8 +126,11 @@ export default class AccountSettingsMenu extends React.Component {
           name="input_edit_name"
           value={this.state.input_edit_name}
           onChange={this.inputChange} />
+        <br/>
         <button onClick={this.editAccount}>Edit</button>
+        <br/>
         <a href onClick={this.deleteAccount}>Delete</a>
+        <br/>
         { this.state.input_edit_valid ? null : <span className="error">You must have an ID for the account. It's also recommended that you have a name.</span> }
       </div>
     );

@@ -19,22 +19,44 @@ export class Transaction {
     this.date = properties.date; // date
     this.type = properties.type; // string
     this.amount = properties.amount; // float
-    this.category = properties.category; // object (category type)
+    this.category = properties.category; // Category
+  }
+}
+
+export class Category {
+  constructor(group, category, subcategory) {
+    this.group = group;
+    this.category = category;
+    this.subcategory = subcategory;
+  }
+}
+
+export class Matcher {
+  constructor(regex, category) {
+    this.id = regex.toString();
+    this.regex = regex;
+    this.category = category;
   }
 }
 
 class DBC {
+  /* istanbul ignore next */
   constructor(options={}) {
-    this.path = path.join(app.getPath('appData'), 'Cyril', 'cyril.db');
-    lokiCryptedFileAdapter.setSecret(this.path);
-    let lokiOptions = Object.assign({
-      adapter: lokiCryptedFileAdapter,
-      autosave: true
-    }, options);
-    this.data = new Loki(this.path, lokiOptions);
+    // path = '/Users/jcrouch/Library/Application Support/Cyril/cyril.db'
+    this.path = app ? path.join(app.getPath('appData'), 'Cyril', 'cyril.db') : '';
+    this.options = options;
   }
-  
+
   initialize() {
+    lokiCryptedFileAdapter.setSecret(this.path);
+    let dbOptions = Object.assign({
+      adapter: lokiCryptedFileAdapter,
+      autosave: true,
+      autosaveInterval: 5000
+    }, this.options);
+
+    this.data = new Loki(this.path, dbOptions);
+
     let dbc = this;
     let collOpts = {
       unique: ['id'],
@@ -42,8 +64,9 @@ class DBC {
     };
     let resolvePromise = function (resolve) {
       dbc.accounts = dbc.findCollection('accounts', collOpts);
+      dbc.matchers = dbc.findCollection('matchers', collOpts);
       resolve();
-    }
+    };
     return new Promise((resolve, reject) => {
       dbc.data.loadDatabase({}, (err) => {
         if (err) {
@@ -81,6 +104,26 @@ class DBC {
     return account;
   }
 
+  getMatchers() {
+    return this.matchers.find();
+  }
+
+  getCategorizations() {
+    return this.matchers.mapReduce(matcher => matcher.category, (categories) => {
+      return categories.reduce((acc, value) => {
+        if (!!value.group) {
+          acc[value.group] = acc[value.group] || {};
+          if (!!value.category) {
+            acc[value.group][value.category] = acc[value.group][value.category] || {};
+            if (!!value.subcategory) {
+              acc[value.group][value.category][value.subcategory] = null;
+            }
+          }
+        }
+        return acc;
+      }, {});
+    });
+  }
 }
 
 let instance = new DBC();

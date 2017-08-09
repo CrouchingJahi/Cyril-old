@@ -46,6 +46,10 @@ export default class API {
     event.sender.send('edited-account', account);
   }
 
+  static getMatchersHandler(event) {
+    event.sender.send('send-matchers', dbc.getMatchers());
+  }
+
   static start(cb) {
     dbc.initialize().then(() => {
       ipcMain.on('upload-file', API.fileUploadHandler);
@@ -53,7 +57,12 @@ export default class API {
       ipcMain.on('get-accounts', API.getAccountsHandler);
       ipcMain.on('delete-account', API.deleteAccountHandler);
       ipcMain.on('edit-account', API.editAccountHandler);
+      ipcMain.on('get-matchers', API.getMatchersHandler);
       cb(1);
+    }).catch(err => {
+      console.log('Database Initialization Error');
+      console.log(err);
+      cb(0);
     });
   }
 }

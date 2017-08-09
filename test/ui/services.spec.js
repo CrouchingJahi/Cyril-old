@@ -39,4 +39,16 @@ describe('the services module', () => {
        done();
      });
   });
+
+  it('getMatchers()', (done) => {
+    Services.getMatchers(() => {
+      done();
+    });
+  });
+
+  it('getCategorizations()', (done) => {
+    Services.getCategorizations(() => {
+      done();
+    });
+  });
 });
